@@ -2,9 +2,9 @@ const mysql = require('mysql');
 
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'student',
-  password: 'student',
-  database: 'YOUR_DATABASE_NAME_HERE'
+  user: 'root',
+  password: '',
+  database: 'cows'
 });
 
 connection.connect((err) => {
@@ -15,13 +15,27 @@ connection.connect((err) => {
   }
 });
 
-// Your Database Queries Here!!
+// fetch All cows
+exports.fetchCows = (callback) => {
+  var queryStr = 'SELECT * FROM cowsList';
+  connection.query(queryStr, (err, results, fields) => {
+    if (err) { callback(err, null) }
+    console.log(results);
+    callback(null, results);
+  })
+};
 
-
-
-
-
-// Don't forget to export your functions!
-module.exports = {
+// insert a cow (does NOT check duplicates)
+exports.addCow = (cowData, callback) => {
+  var queryStr = 'INSERT INTO cowsList (name, description) VALUES (?, ?)';
+  // console.log('cowData', cowData);
+  // var name = cowData.name;
+  // var description = cowData.description;
+  var values = [cowData.name, cowData.description];
+  connection.query(queryStr, values, (err, results, fields) => {
+    if (err) { callback(err, null); }
+    // console.log(results);
+    callback(null, results);
+  })
 
 };
