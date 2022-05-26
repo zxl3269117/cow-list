@@ -7,13 +7,10 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// app.use(express.urlencoded({
-//   extneded: true
-// }))
 app.use(express.json());
 
+// handle Read all cows
 app.get('/api/cows', (req, res) => {
-  // fetch all cows data from database
   dbQuery.fetchCows((err, allCows) => {
     if (err) { console.log(err); }
     res.status(200).send(allCows);
@@ -21,6 +18,7 @@ app.get('/api/cows', (req, res) => {
 
 })
 
+// handle Create a cow
 app.post('/api/cows', (req, res) => {
   var cow = req.body;
   dbQuery.addCow(cow, (err, results) => {
